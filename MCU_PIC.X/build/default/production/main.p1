@@ -25,12 +25,18 @@ Version 4.0 HI-TECH Software Intermediate Code
 "50 main.c
 [; ;main.c: 50:     return((valor >> 4)*10+(valor & 0x0F));
 [v _bcd_a_dec `(uc ~T0 @X0 0 ef1`uc ]
-"3387 C:/Program Files (x86)/Microchip/MPLABX/v5.40/packs/Microchip/PIC16Fxxx_DFP/1.2.33/xc8\pic\include\proc\pic16f887.h
+"228 C:/Program Files (x86)/Microchip/MPLABX/v5.40/packs/Microchip/PIC16Fxxx_DFP/1.2.33/xc8\pic\include\proc\pic16f887.h
+[; ;C:/Program Files (x86)/Microchip/MPLABX/v5.40/packs/Microchip/PIC16Fxxx_DFP/1.2.33/xc8\pic\include\proc\pic16f887.h: 228: extern volatile unsigned char PORTB __attribute__((address(0x006)));
+[v _PORTB `Vuc ~T0 @X0 0 e@6 ]
+"3387
 [; ;C:/Program Files (x86)/Microchip/MPLABX/v5.40/packs/Microchip/PIC16Fxxx_DFP/1.2.33/xc8\pic\include\proc\pic16f887.h: 3387: extern volatile unsigned char ANSEL __attribute__((address(0x188)));
 [v _ANSEL `Vuc ~T0 @X0 0 e@392 ]
 "3449
 [; ;C:/Program Files (x86)/Microchip/MPLABX/v5.40/packs/Microchip/PIC16Fxxx_DFP/1.2.33/xc8\pic\include\proc\pic16f887.h: 3449: extern volatile unsigned char ANSELH __attribute__((address(0x189)));
 [v _ANSELH `Vuc ~T0 @X0 0 e@393 ]
+"1478
+[; ;C:/Program Files (x86)/Microchip/MPLABX/v5.40/packs/Microchip/PIC16Fxxx_DFP/1.2.33/xc8\pic\include\proc\pic16f887.h: 1478: extern volatile unsigned char TRISB __attribute__((address(0x086)));
+[v _TRISB `Vuc ~T0 @X0 0 e@134 ]
 "29 ./I2C.h
 [; ;./I2C.h: 29: void I2C_Master_Init(const unsigned long c);
 [v _I2C_Master_Init `(v ~T0 @X0 0 ef1`Cul ]
@@ -360,35 +366,35 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;main.c: 59:     I2C_Master_Write(0xD0);
 [e ( _set_tiempo ..  ]
 "60
-[; ;main.c: 60:     I2C_Master_Write(dec_a_bcd(seg));
+[; ;main.c: 60:     I2C_Master_Write(0);
 [e :U 141 ]
 {
 "61
-[; ;main.c: 61:     I2C_Master_Write(dec_a_bcd(min));
+[; ;main.c: 61:     I2C_Master_Write(dec_a_bcd(seg));
 [e ( _I2C_Master_Start ..  ]
 "62
-[; ;main.c: 62:     I2C_Master_Write(dec_a_bcd(hora));
+[; ;main.c: 62:     I2C_Master_Write(dec_a_bcd(min));
 [e ( _I2C_Master_Write (1 -> -> 208 `i `ui ]
 "63
-[; ;main.c: 63:     I2C_Master_Write (1);
+[; ;main.c: 63:     I2C_Master_Write(dec_a_bcd(hora));
 [e ( _I2C_Master_Write (1 -> -> 0 `i `ui ]
 "64
-[; ;main.c: 64:     I2C_Master_Write(dec_a_bcd(dia));
+[; ;main.c: 64:     I2C_Master_Write (1);
 [e ( _I2C_Master_Stop ..  ]
 "66
-[; ;main.c: 66:     I2C_Master_Write(dec_a_bcd(year));
+[; ;main.c: 66:     I2C_Master_Write(dec_a_bcd(mes));
 [e ( _I2C_Master_Start ..  ]
 "67
-[; ;main.c: 67:     I2C_Master_Stop();
+[; ;main.c: 67:     I2C_Master_Write(dec_a_bcd(year));
 [e ( _I2C_Master_Write (1 -> -> 209 `i `ui ]
 "68
-[; ;main.c: 68:     _delay((unsigned long)((200)*(8000000/4000.0)));
+[; ;main.c: 68:     I2C_Master_Stop();
 [e = _seg -> ( _I2C_Master_Read (1 -> -> 1 `i `us `i ]
 "69
-[; ;main.c: 69: }
+[; ;main.c: 69:     _delay((unsigned long)((200)*(8000000/4000.0)));
 [e ( _I2C_Master_Read (1 -> -> 1 `i `us ]
 "70
-[; ;main.c: 70: 
+[; ;main.c: 70: }
 [e ( _I2C_Master_Stop ..  ]
 "72
 [; ;main.c: 72: 
@@ -397,23 +403,28 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;main.c: 73: 
 [e ( _I2C_Master_Write (1 -> -> 209 `i `ui ]
 "74
-[; ;main.c: 74: void setup(void) {
+[; ;main.c: 74: 
 [e ( _I2C_Master_Write (1 -> -> 0 `i `ui ]
 "75
-[; ;main.c: 75:     ANSEL = 0;
+[; ;main.c: 75: void setup(void) {
 [e ( _I2C_Master_Stop ..  ]
 "76
-[; ;main.c: 76:     ANSELH = 0;
+[; ;main.c: 76:     ANSEL = 0;
 [e ( __delay (1 -> * -> -> 200 `i `d / -> -> 8000000 `l `d .4000.0 `ul ]
 "78
-[; ;main.c: 78:     I2C_Master_Init(100000);
+[; ;main.c: 78:     TRISB = 0;
 [e = _segundos ( _bcd_a_dec (1 -> _seg `uc ]
+"79
+[; ;main.c: 79:     PORTB = 0;
+[e = _PORTB _segundos ]
 "80
+[; ;main.c: 80:     I2C_Master_Init(100000);
 }
 [e :U 140 ]
 [e $U 141  ]
 [e :U 142 ]
 "81
+[; ;main.c: 81: }
 [e :UE 139 ]
 }
 "82
@@ -450,37 +461,43 @@ Version 4.0 HI-TECH Software Intermediate Code
 "92
 [e ( _I2C_Master_Write (1 -> -> 208 `i `ui ]
 "93
-[e ( _I2C_Master_Write (1 -> ( _dec_a_bcd (1 -> _seg `uc `ui ]
+[e ( _I2C_Master_Write (1 -> -> 0 `i `ui ]
 "94
-[e ( _I2C_Master_Write (1 -> ( _dec_a_bcd (1 -> _min `uc `ui ]
+[e ( _I2C_Master_Write (1 -> ( _dec_a_bcd (1 -> _seg `uc `ui ]
 "95
-[e ( _I2C_Master_Write (1 -> ( _dec_a_bcd (1 -> _hora `uc `ui ]
+[e ( _I2C_Master_Write (1 -> ( _dec_a_bcd (1 -> _min `uc `ui ]
 "96
-[e ( _I2C_Master_Write (1 -> -> 1 `i `ui ]
+[e ( _I2C_Master_Write (1 -> ( _dec_a_bcd (1 -> _hora `uc `ui ]
 "97
-[e ( _I2C_Master_Write (1 -> ( _dec_a_bcd (1 -> _dia `uc `ui ]
+[e ( _I2C_Master_Write (1 -> -> 1 `i `ui ]
 "98
-[e ( _I2C_Master_Write (1 -> ( _dec_a_bcd (1 -> _mes `uc `ui ]
+[e ( _I2C_Master_Write (1 -> ( _dec_a_bcd (1 -> _dia `uc `ui ]
 "99
-[e ( _I2C_Master_Write (1 -> ( _dec_a_bcd (1 -> _year `uc `ui ]
+[e ( _I2C_Master_Write (1 -> ( _dec_a_bcd (1 -> _mes `uc `ui ]
 "100
-[e ( _I2C_Master_Stop ..  ]
+[e ( _I2C_Master_Write (1 -> ( _dec_a_bcd (1 -> _year `uc `ui ]
 "101
-[e ( __delay (1 -> * -> -> 200 `i `d / -> -> 8000000 `l `d .4000.0 `ul ]
+[e ( _I2C_Master_Stop ..  ]
 "102
+[e ( __delay (1 -> * -> -> 200 `i `d / -> -> 8000000 `l `d .4000.0 `ul ]
+"103
 [e :UE 145 ]
 }
-"107
+"108
 [v _setup `(v ~T0 @X0 1 ef ]
 {
 [e :U _setup ]
 [f ]
-"108
-[e = _ANSEL -> -> 0 `i `uc ]
 "109
+[e = _ANSEL -> -> 0 `i `uc ]
+"110
 [e = _ANSELH -> -> 0 `i `uc ]
 "111
-[e ( _I2C_Master_Init (1 -> -> 100000 `l `ul ]
+[e = _TRISB -> -> 0 `i `uc ]
 "112
+[e = _PORTB -> -> 0 `i `uc ]
+"113
+[e ( _I2C_Master_Init (1 -> -> 100000 `l `ul ]
+"114
 [e :UE 146 ]
 }

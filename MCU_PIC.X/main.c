@@ -76,7 +76,7 @@ void main(void) {
         __delay_ms(200);
         
         segundos = bcd_a_dec(seg);
-      
+        PORTB = segundos;
     }
 }
 uint8_t bcd_a_dec (uint8_t valor){
@@ -90,6 +90,7 @@ uint8_t dec_a_bcd (uint8_t valor){
 void set_tiempo (void){
     I2C_Master_Start();
     I2C_Master_Write(0xD0);
+    I2C_Master_Write(0);
     I2C_Master_Write(dec_a_bcd(seg));
     I2C_Master_Write(dec_a_bcd(min));
     I2C_Master_Write(dec_a_bcd(hora));
@@ -107,6 +108,7 @@ void set_tiempo (void){
 void setup(void) {
     ANSEL = 0;
     ANSELH = 0;
-    
+    TRISB = 0;
+    PORTB = 0;
     I2C_Master_Init(100000);        // Inicializar Comuncación I2C
 }
