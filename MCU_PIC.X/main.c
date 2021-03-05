@@ -105,8 +105,8 @@ void main(void) {
         segundos = bcd_a_dec(seg);
         sprintf(BUFFER,"%d",segundos);
         Write_USART_String(BUFFER);
-        Write_USART(13);
-        Write_USART(10);
+       // Write_USART(13);
+       // Write_USART(10);
     }
 }
 uint8_t bcd_a_dec (uint8_t valor){
