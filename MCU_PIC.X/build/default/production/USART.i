@@ -1,4 +1,4 @@
-# 1 "main.c"
+# 1 "USART.c"
 # 1 "<built-in>" 1
 # 1 "<built-in>" 3
 # 288 "<built-in>" 3
@@ -6,15 +6,7 @@
 # 1 "<built-in>" 2
 # 1 "C:/Program Files (x86)/Microchip/MPLABX/v5.40/packs/Microchip/PIC16Fxxx_DFP/1.2.33/xc8\\pic\\include\\language_support.h" 1 3
 # 2 "<built-in>" 2
-# 1 "main.c" 2
-
-
-
-
-
-
-
-
+# 1 "USART.c" 2
 # 1 "C:/Program Files (x86)/Microchip/MPLABX/v5.40/packs/Microchip/PIC16Fxxx_DFP/1.2.33/xc8\\pic\\include\\xc.h" 1 3
 # 18 "C:/Program Files (x86)/Microchip/MPLABX/v5.40/packs/Microchip/PIC16Fxxx_DFP/1.2.33/xc8\\pic\\include\\xc.h" 3
 extern const char __xc8_OPTIM_SPEED;
@@ -2495,8 +2487,11 @@ extern __bank0 unsigned char __resetbits;
 extern __bank0 __bit __powerdown;
 extern __bank0 __bit __timeout;
 # 28 "C:/Program Files (x86)/Microchip/MPLABX/v5.40/packs/Microchip/PIC16Fxxx_DFP/1.2.33/xc8\\pic\\include\\xc.h" 2 3
-# 9 "main.c" 2
+# 1 "USART.c" 2
 
+
+# 1 "./USART.h" 1
+# 14 "./USART.h"
 # 1 "C:\\Program Files\\Microchip\\xc8\\v2.31\\pic\\include\\c90\\stdint.h" 1 3
 # 13 "C:\\Program Files\\Microchip\\xc8\\v2.31\\pic\\include\\c90\\stdint.h" 3
 typedef signed char int8_t;
@@ -2630,153 +2625,6 @@ typedef int16_t intptr_t;
 
 
 typedef uint16_t uintptr_t;
-# 10 "main.c" 2
-
-# 1 "C:\\Program Files\\Microchip\\xc8\\v2.31\\pic\\include\\c90\\stdio.h" 1 3
-
-
-
-# 1 "C:/Program Files (x86)/Microchip/MPLABX/v5.40/packs/Microchip/PIC16Fxxx_DFP/1.2.33/xc8\\pic\\include\\__size_t.h" 1 3
-
-
-
-typedef unsigned size_t;
-# 4 "C:\\Program Files\\Microchip\\xc8\\v2.31\\pic\\include\\c90\\stdio.h" 2 3
-
-# 1 "C:/Program Files (x86)/Microchip/MPLABX/v5.40/packs/Microchip/PIC16Fxxx_DFP/1.2.33/xc8\\pic\\include\\__null.h" 1 3
-# 5 "C:\\Program Files\\Microchip\\xc8\\v2.31\\pic\\include\\c90\\stdio.h" 2 3
-
-
-
-
-
-
-# 1 "C:\\Program Files\\Microchip\\xc8\\v2.31\\pic\\include\\c90\\stdarg.h" 1 3
-
-
-
-
-
-
-typedef void * va_list[1];
-
-#pragma intrinsic(__va_start)
-extern void * __va_start(void);
-
-#pragma intrinsic(__va_arg)
-extern void * __va_arg(void *, ...);
-# 11 "C:\\Program Files\\Microchip\\xc8\\v2.31\\pic\\include\\c90\\stdio.h" 2 3
-# 43 "C:\\Program Files\\Microchip\\xc8\\v2.31\\pic\\include\\c90\\stdio.h" 3
-struct __prbuf
-{
- char * ptr;
- void (* func)(char);
-};
-# 85 "C:\\Program Files\\Microchip\\xc8\\v2.31\\pic\\include\\c90\\stdio.h" 3
-# 1 "C:\\Program Files\\Microchip\\xc8\\v2.31\\pic\\include\\c90\\conio.h" 1 3
-
-
-
-
-
-
-
-# 1 "C:\\Program Files\\Microchip\\xc8\\v2.31\\pic\\include\\c90\\errno.h" 1 3
-# 29 "C:\\Program Files\\Microchip\\xc8\\v2.31\\pic\\include\\c90\\errno.h" 3
-extern int errno;
-# 8 "C:\\Program Files\\Microchip\\xc8\\v2.31\\pic\\include\\c90\\conio.h" 2 3
-
-
-
-
-extern void init_uart(void);
-
-extern char getch(void);
-extern char getche(void);
-extern void putch(char);
-extern void ungetch(char);
-
-extern __bit kbhit(void);
-
-
-
-extern char * cgets(char *);
-extern void cputs(const char *);
-# 85 "C:\\Program Files\\Microchip\\xc8\\v2.31\\pic\\include\\c90\\stdio.h" 2 3
-
-
-
-extern int cprintf(char *, ...);
-#pragma printf_check(cprintf)
-
-
-
-extern int _doprnt(struct __prbuf *, const register char *, register va_list);
-# 180 "C:\\Program Files\\Microchip\\xc8\\v2.31\\pic\\include\\c90\\stdio.h" 3
-#pragma printf_check(vprintf) const
-#pragma printf_check(vsprintf) const
-
-extern char * gets(char *);
-extern int puts(const char *);
-extern int scanf(const char *, ...) __attribute__((unsupported("scanf() is not supported by this compiler")));
-extern int sscanf(const char *, const char *, ...) __attribute__((unsupported("sscanf() is not supported by this compiler")));
-extern int vprintf(const char *, va_list) __attribute__((unsupported("vprintf() is not supported by this compiler")));
-extern int vsprintf(char *, const char *, va_list) __attribute__((unsupported("vsprintf() is not supported by this compiler")));
-extern int vscanf(const char *, va_list ap) __attribute__((unsupported("vscanf() is not supported by this compiler")));
-extern int vsscanf(const char *, const char *, va_list) __attribute__((unsupported("vsscanf() is not supported by this compiler")));
-
-#pragma printf_check(printf) const
-#pragma printf_check(sprintf) const
-extern int sprintf(char *, const char *, ...);
-extern int printf(const char *, ...);
-# 11 "main.c" 2
-
-# 1 "./I2C.h" 1
-# 20 "./I2C.h"
-# 1 "C:\\Program Files\\Microchip\\xc8\\v2.31\\pic\\include\\c90\\stdint.h" 1 3
-# 20 "./I2C.h" 2
-# 29 "./I2C.h"
-void I2C_Master_Init(const unsigned long c);
-
-
-
-
-
-
-
-void I2C_Master_Wait(void);
-
-
-
-void I2C_Master_Start(void);
-
-
-
-void I2C_Master_RepeatedStart(void);
-
-
-
-void I2C_Master_Stop(void);
-
-
-
-
-
-void I2C_Master_Write(unsigned d);
-
-
-
-
-unsigned short I2C_Master_Read(unsigned short a);
-
-
-
-void I2C_Slave_Init(uint8_t address);
-# 12 "main.c" 2
-
-# 1 "./USART.h" 1
-# 14 "./USART.h"
-# 1 "C:\\Program Files\\Microchip\\xc8\\v2.31\\pic\\include\\c90\\stdint.h" 1 3
 # 14 "./USART.h" 2
 
 
@@ -2787,143 +2635,41 @@ void config_rcsta(void);
 void Write_USART(uint8_t a);
 void Write_USART_String(char *a);
 uint8_t Read_USART(void);
-# 13 "main.c" 2
+# 3 "USART.c" 2
 
 
-
-
-
-
-#pragma config FOSC = EXTRC_NOCLKOUT
-#pragma config WDTE = OFF
-#pragma config PWRTE = OFF
-#pragma config MCLRE = OFF
-#pragma config CP = OFF
-#pragma config CPD = OFF
-#pragma config BOREN = OFF
-#pragma config IESO = OFF
-#pragma config FCMEN = OFF
-#pragma config LVP = OFF
-
-
-#pragma config BOR4V = BOR40V
-#pragma config WRT = OFF
-
-
-
-
-
-int seg = 00;
-int min = 00;
-int hora = 00;
-int dia = 00;
-int mes = 00;
-int year = 00;
-uint8_t segundos = 0;
-char lecUSART = 0;
-char BUFFER[20];
-
-
-
-
-void setup(void);
-void set_tiempo (void);
-uint8_t bcd_a_dec (uint8_t valor);
-uint8_t dec_a_bcd (uint8_t valor);
-
-
-
-
-void __attribute__((picinterrupt(("")))) ISR(){
-   if (RCIF == 1){
-       RCIF = 0;
-       lecUSART = Read_USART();
-       if (lecUSART == '+'){
-           PORTBbits.RB0 = 1;
-       }
-       else if (lecUSART == '-'){
-           PORTBbits.RB0 = 0;
-       }
-       if (lecUSART == '1'){
-           PORTBbits.RB1 = 1;
-       }
-       else if (lecUSART == '2'){
-           PORTBbits.RB1 = 0;
-       }
-   }
+void _baudios(void){
+    SPBRG = 12;
 }
 
+void config_txsta(void){
+    TXSTAbits.CSRC = 0;
+    TXSTAbits.TX9 = 0;
+    TXSTAbits.TXEN = 1;
+    TXSTAbits.SYNC = 0;
+    TXSTAbits.BRGH = 0;
+    TXSTAbits.TRMT = 0;
+    TXSTAbits.TX9D = 0;
+}
 
-
-
-void main(void) {
-    setup();
-    _baudios();
-    config_txsta();
-    config_rcsta();
-    set_tiempo();
-    while (1){
-        I2C_Master_Start();
-        I2C_Master_Write(0xD0);
-        I2C_Master_Write(0);
-        I2C_Master_Stop();
-
-        I2C_Master_Start();
-        I2C_Master_Write(0xD1);
-        seg = (I2C_Master_Read(1));
-        I2C_Master_Read(1);
-        I2C_Master_Stop();
-
-        I2C_Master_Start();
-        I2C_Master_Write(0xD1);
-        I2C_Master_Write(0);
-        I2C_Master_Stop();
-        _delay((unsigned long)((200)*(8000000/4000.0)));
-
-        segundos = bcd_a_dec(seg);
-        sprintf(BUFFER,"%d",segundos);
-        Write_USART_String(BUFFER);
-        Write_USART(13);
-        Write_USART(10);
+void config_rcsta(void){
+    RCSTAbits.SPEN = 1;
+    RCSTAbits.RX9 = 0;
+    RCSTAbits.SREN = 0;
+    RCSTAbits.CREN = 1;
+    RCREG = 0;
+}
+void Write_USART(uint8_t a){
+    while(!TRMT);
+    TXREG=a;
+}
+void Write_USART_String(char *a){
+    uint8_t i;
+    for(i=0;a[i]!='\0';i++){
+        Write_USART(a[i]);
     }
 }
-uint8_t bcd_a_dec (uint8_t valor){
-    return((valor >> 4)*10+(valor & 0x0F));
-}
-
-uint8_t dec_a_bcd (uint8_t valor){
-    return(((valor/10) << 4) + (valor % 10));
-}
-
-void set_tiempo (void){
-    I2C_Master_Start();
-    I2C_Master_Write(0xD0);
-    I2C_Master_Write(0);
-    I2C_Master_Write(dec_a_bcd(seg));
-    I2C_Master_Write(dec_a_bcd(min));
-    I2C_Master_Write(dec_a_bcd(hora));
-    I2C_Master_Write (1);
-    I2C_Master_Write(dec_a_bcd(dia));
-    I2C_Master_Write(dec_a_bcd(mes));
-    I2C_Master_Write(dec_a_bcd(year));
-    I2C_Master_Stop();
-    _delay((unsigned long)((200)*(8000000/4000.0)));
-}
-
-
-
-
-void setup(void) {
-    ANSEL = 0;
-    ANSELH = 0;
-    TRISB = 0;
-    PORTB = 0;
-    PORTC = 0;
-
-    INTCONbits.PEIE = 1;
-    PIE1bits.RCIE = 1;
-    PIR1bits.RCIF = 0;
-    INTCONbits.GIE = 1;
-
-    I2C_Master_Init(100000);
+uint8_t Read_USART(){
+  while(!RCIF);
+  return RCREG;
 }

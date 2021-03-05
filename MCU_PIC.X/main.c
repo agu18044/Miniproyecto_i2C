@@ -10,6 +10,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include "I2C.h"
+#include "USART.h"
 
 //******************************************************************************
 //  Palabra de cofiguración
@@ -41,6 +42,8 @@ int dia = 00;
 int mes = 00;
 int year = 00;
 uint8_t segundos = 0;
+char lecUSART = 0;
+char BUFFER[20];
 
 //******************************************************************************
 //  Prototipos de funciones
@@ -50,12 +53,36 @@ void set_tiempo (void);
 uint8_t bcd_a_dec (uint8_t valor);
 uint8_t dec_a_bcd (uint8_t valor);
 
+//******************************************************************************
+// Interupciones 
+//******************************************************************************
+void __interrupt() ISR(){
+   if (RCIF == 1){
+       RCIF = 0;
+       lecUSART = Read_USART();
+       if (lecUSART == '+'){
+           PORTBbits.RB0 = 1;
+       }
+       else if (lecUSART == '-'){
+           PORTBbits.RB0 = 0;
+       }
+       if (lecUSART == '1'){
+           PORTBbits.RB1 = 1;
+       }
+       else if (lecUSART == '2'){
+           PORTBbits.RB1 = 0;
+       }
+   } 
+}
 
 //******************************************************************************
 //  Ciclo principal
 //******************************************************************************
 void main(void) {
     setup();
+    _baudios();
+    config_txsta();
+    config_rcsta();
     set_tiempo();
     while (1){
         I2C_Master_Start();
@@ -76,7 +103,10 @@ void main(void) {
         __delay_ms(200);
         
         segundos = bcd_a_dec(seg);
-        //PORTB = segundos;
+        sprintf(BUFFER,"%d",segundos);
+        Write_USART_String(BUFFER);
+        Write_USART(13);
+        Write_USART(10);
     }
 }
 uint8_t bcd_a_dec (uint8_t valor){
@@ -108,7 +138,14 @@ void set_tiempo (void){
 void setup(void) {
     ANSEL = 0;
     ANSELH = 0;
-   // TRISB = 0;
-   //PORTB = 0;
+    TRISB = 0;
+    PORTB = 0;
+    PORTC = 0;
+    
+    INTCONbits.PEIE = 1;
+    PIE1bits.RCIE = 1;
+    PIR1bits.RCIF = 0;
+    INTCONbits.GIE = 1;
+
     I2C_Master_Init(100000);        // Inicializar Comuncación I2C
 }
