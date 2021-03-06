@@ -2794,7 +2794,7 @@ uint8_t Read_USART(void);
 
 
 
-#pragma config FOSC = EXTRC_NOCLKOUT
+#pragma config FOSC = INTRC_NOCLKOUT
 #pragma config WDTE = OFF
 #pragma config PWRTE = OFF
 #pragma config MCLRE = OFF
@@ -2828,6 +2828,7 @@ char BUFFER[20];
 
 void setup(void);
 void set_tiempo (void);
+void lec_tiempo (void);
 uint8_t bcd_a_dec (uint8_t valor);
 uint8_t dec_a_bcd (uint8_t valor);
 
@@ -2863,28 +2864,14 @@ void main(void) {
     config_rcsta();
     set_tiempo();
     while (1){
-        I2C_Master_Start();
-        I2C_Master_Write(0xD0);
-        I2C_Master_Write(0);
-        I2C_Master_Stop();
+        lec_tiempo();
 
-        I2C_Master_Start();
-        I2C_Master_Write(0xD1);
-        seg = (I2C_Master_Read(1));
-        I2C_Master_Read(1);
-        I2C_Master_Stop();
-
-        I2C_Master_Start();
-        I2C_Master_Write(0xD1);
-        I2C_Master_Write(0);
-        I2C_Master_Stop();
-        _delay((unsigned long)((200)*(8000000/4000.0)));
-
-        segundos = bcd_a_dec(seg);
-        sprintf(BUFFER,"%d",segundos);
+        sprintf(BUFFER, "%d", seg);
         Write_USART_String(BUFFER);
         Write_USART(13);
         Write_USART(10);
+
+
     }
 }
 uint8_t bcd_a_dec (uint8_t valor){
@@ -2907,7 +2894,32 @@ void set_tiempo (void){
     I2C_Master_Write(dec_a_bcd(mes));
     I2C_Master_Write(dec_a_bcd(year));
     I2C_Master_Stop();
-    _delay((unsigned long)((200)*(8000000/4000.0)));
+
+}
+
+void lec_tiempo (void){
+      I2C_Master_Start();
+      I2C_Master_Write(0xD0);
+      I2C_Master_Write(0);
+      I2C_Master_Stop();
+
+      I2C_Master_Start();
+      I2C_Master_Write(0xD1);
+      seg = bcd_a_dec(I2C_Master_Read(1));
+      min = bcd_a_dec(I2C_Master_Read(1));
+      hora = bcd_a_dec(I2C_Master_Read(1));
+      I2C_Master_Read(1);
+      dia = bcd_a_dec(I2C_Master_Read(1));
+      mes = bcd_a_dec(I2C_Master_Read(1));
+      year = bcd_a_dec(I2C_Master_Read(1));
+      I2C_Master_Stop();
+
+      I2C_Master_Start();
+      I2C_Master_Write(0xD1);
+      I2C_Master_Read(1);
+      I2C_Master_Stop();
+      _delay((unsigned long)((200)*(8000000/4000.0)));
+
 }
 
 
@@ -2918,7 +2930,9 @@ void setup(void) {
     ANSELH = 0;
     TRISB = 0;
     PORTB = 0;
-    PORTC = 0;
+    IRCF0 = 1;
+    IRCF1 = 1;
+    IRCF2 = 1;
 
     INTCONbits.PEIE = 1;
     PIE1bits.RCIE = 1;

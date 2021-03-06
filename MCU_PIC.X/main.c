@@ -16,7 +16,7 @@
 //  Palabra de cofiguración
 //******************************************************************************
 // CONFIG1
-#pragma config FOSC = EXTRC_NOCLKOUT        // Oscillator Selection bits (XT oscillator: Crystal/resonator on RA6/OSC2/CLKOUT and RA7/OSC1/CLKIN)
+#pragma config FOSC = INTRC_NOCLKOUT         // Oscillator Selection bits (XT oscillator: Crystal/resonator on RA6/OSC2/CLKOUT and RA7/OSC1/CLKIN)
 #pragma config WDTE = OFF       // Watchdog Timer Enable bit (WDT disabled and can be enabled by SWDTEN bit of the WDTCON register)
 #pragma config PWRTE = OFF      // Power-up Timer Enable bit (PWRT disabled)
 #pragma config MCLRE = OFF      // RE3/MCLR pin function select bit (RE3/MCLR pin function is digital input, MCLR internally tied to VDD)
@@ -50,6 +50,7 @@ char BUFFER[20];
 //******************************************************************************
 void setup(void);
 void set_tiempo (void);
+void lec_tiempo (void);
 uint8_t bcd_a_dec (uint8_t valor);
 uint8_t dec_a_bcd (uint8_t valor);
 
@@ -85,28 +86,14 @@ void main(void) {
     config_rcsta();
     set_tiempo();
     while (1){
-        I2C_Master_Start();
-        I2C_Master_Write(0xD0);
-        I2C_Master_Write(0);
-        I2C_Master_Stop();
-        
-        I2C_Master_Start();
-        I2C_Master_Write(0xD1);
-        seg = (I2C_Master_Read(1));
-        I2C_Master_Read(1);
-        I2C_Master_Stop();
-        
-        I2C_Master_Start();
-        I2C_Master_Write(0xD1);
-        I2C_Master_Write(0);
-        I2C_Master_Stop();
-        __delay_ms(200);
-        
-        segundos = bcd_a_dec(seg);
-        sprintf(BUFFER,"%d",segundos);
+        lec_tiempo();
+        //__delay_ms(500); 
+        sprintf(BUFFER, "%d", seg);
         Write_USART_String(BUFFER);
-       // Write_USART(13);
-       // Write_USART(10);
+        Write_USART(13);
+        Write_USART(10);
+        
+
     }
 }
 uint8_t bcd_a_dec (uint8_t valor){
@@ -129,7 +116,32 @@ void set_tiempo (void){
     I2C_Master_Write(dec_a_bcd(mes));
     I2C_Master_Write(dec_a_bcd(year));
     I2C_Master_Stop();
-    __delay_ms(200);
+    //__delay_ms(200);
+}
+
+void lec_tiempo (void){
+      I2C_Master_Start();
+      I2C_Master_Write(0xD0);
+      I2C_Master_Write(0);
+      I2C_Master_Stop();
+      
+      I2C_Master_Start();
+      I2C_Master_Write(0xD1);
+      seg = bcd_a_dec(I2C_Master_Read(1));
+      min = bcd_a_dec(I2C_Master_Read(1));
+      hora = bcd_a_dec(I2C_Master_Read(1));
+      I2C_Master_Read(1);
+      dia = bcd_a_dec(I2C_Master_Read(1));
+      mes = bcd_a_dec(I2C_Master_Read(1));
+      year = bcd_a_dec(I2C_Master_Read(1));
+      I2C_Master_Stop();
+      
+      I2C_Master_Start();
+      I2C_Master_Write(0xD1);
+      I2C_Master_Read(1);
+      I2C_Master_Stop();
+      __delay_ms(200); 
+       
 }
 
 //******************************************************************************
@@ -140,8 +152,10 @@ void setup(void) {
     ANSELH = 0;
     TRISB = 0;
     PORTB = 0;
-    PORTC = 0;
-    
+    IRCF0 = 1;
+    IRCF1 = 1;
+    IRCF2 = 1;
+
     INTCONbits.PEIE = 1;
     PIE1bits.RCIE = 1;
     PIR1bits.RCIF = 0;
