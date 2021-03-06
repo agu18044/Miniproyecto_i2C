@@ -2827,8 +2827,8 @@ char BUFFER[20];
 
 
 void setup(void);
-void set_tiempo (void);
-void lec_tiempo (void);
+
+
 uint8_t bcd_a_dec (uint8_t valor);
 uint8_t dec_a_bcd (uint8_t valor);
 
@@ -2839,16 +2839,16 @@ void __attribute__((picinterrupt(("")))) ISR(){
    if (RCIF == 1){
        RCIF = 0;
        lecUSART = Read_USART();
-       if (lecUSART == '+'){
+       if (lecUSART == '11'){
            PORTBbits.RB0 = 1;
        }
-       else if (lecUSART == '-'){
+       else if (lecUSART == '10'){
            PORTBbits.RB0 = 0;
        }
-       if (lecUSART == '1'){
+       if (lecUSART == '21'){
            PORTBbits.RB1 = 1;
        }
-       else if (lecUSART == '2'){
+       else if (lecUSART == '20'){
            PORTBbits.RB1 = 0;
        }
    }
@@ -2862,14 +2862,14 @@ void main(void) {
     _baudios();
     config_txsta();
     config_rcsta();
-    set_tiempo();
-    while (1){
-        lec_tiempo();
 
+    while (1){
+
+
+        seg = 10;
         sprintf(BUFFER, "%d", seg);
         Write_USART_String(BUFFER);
-        Write_USART(13);
-        Write_USART(10);
+
 
 
     }
@@ -2881,50 +2881,7 @@ uint8_t bcd_a_dec (uint8_t valor){
 uint8_t dec_a_bcd (uint8_t valor){
     return(((valor/10) << 4) + (valor % 10));
 }
-
-void set_tiempo (void){
-    I2C_Master_Start();
-    I2C_Master_Write(0xD0);
-    I2C_Master_Write(0);
-    I2C_Master_Write(dec_a_bcd(seg));
-    I2C_Master_Write(dec_a_bcd(min));
-    I2C_Master_Write(dec_a_bcd(hora));
-    I2C_Master_Write (1);
-    I2C_Master_Write(dec_a_bcd(dia));
-    I2C_Master_Write(dec_a_bcd(mes));
-    I2C_Master_Write(dec_a_bcd(year));
-    I2C_Master_Stop();
-
-}
-
-void lec_tiempo (void){
-      I2C_Master_Start();
-      I2C_Master_Write(0xD0);
-      I2C_Master_Write(0);
-      I2C_Master_Stop();
-
-      I2C_Master_Start();
-      I2C_Master_Write(0xD1);
-      seg = bcd_a_dec(I2C_Master_Read(1));
-      min = bcd_a_dec(I2C_Master_Read(1));
-      hora = bcd_a_dec(I2C_Master_Read(1));
-      I2C_Master_Read(1);
-      dia = bcd_a_dec(I2C_Master_Read(1));
-      mes = bcd_a_dec(I2C_Master_Read(1));
-      year = bcd_a_dec(I2C_Master_Read(1));
-      I2C_Master_Stop();
-
-      I2C_Master_Start();
-      I2C_Master_Write(0xD1);
-      I2C_Master_Read(1);
-      I2C_Master_Stop();
-      _delay((unsigned long)((200)*(8000000/4000.0)));
-
-}
-
-
-
-
+# 150 "main.c"
 void setup(void) {
     ANSEL = 0;
     ANSELH = 0;
